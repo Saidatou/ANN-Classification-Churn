@@ -16,7 +16,7 @@ ANN (Artificial Neural Network) et RNN (Recurrent Neural Network) sont deux type
 🔹 ANN (Artificial Neural Network)
 Un réseau de neurones artificiels est un modèle informatique inspiré du fonctionnement du cerveau humain. Il est composé de neurones artificiels organisés en couches : Entrée → données d’entrée (ex : pixels d’une image). Couches cachées → traitement intermédiaire.
 
-Sortie → prédiction ou classification finale. Utilisation : Reconnaissance d’image, Classification (spam ou non-spam), Régression (prédiction de valeur). 🧠 C’est un modèle statique : il n’a pas de mémoire du passé.
+Sortie → prédiction ou classification finale. Utilisation : Reconnaissance d’image, Classification (spam ou non-spam), Régression (prédiction de valeur). 🧠 C’est un modèle statue : il n’a pas de mémoire du passé.
 
 🔹 RNN (Recurrent Neural Network)
 Le réseau de neurones récurrent est une extension de l’ANN, avec une mémoire. Il traite des données séquentielles (suite de données dans le temps). Chaque sortie dépend des entrées actuelles ET des entrées précédentes (mémoire interne).
@@ -27,7 +27,7 @@ Il y a des boucles dans le réseau → permet de « se souvenir » du contexte. 
 # Étapes de mise en place du projet (version vulgarisée)
 1) Préparer l’environnement de travail
 J’ai commencé par créer un espace de travail propre et isolé, qui me permet de travailler sur le projet sans interférer avec d’autres programmes installés sur l’ordinateur.
-
+iq
 2) Activer l’environnement
 Une fois cet espace prêt, je l’ai activé pour que tous les outils et bibliothèques utilisés soient bien organisés à l’intérieur.
 
