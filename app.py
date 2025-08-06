@@ -157,7 +157,7 @@ if st.button('🔮 Prédire le Churn', type="primary", use_container_width=True)
                 color = "green"
         
         # Barre de progression
-        st.progress(prediction_proba)
+        st.progress(float(prediction_proba))
         
         # Recommandations
         st.subheader("💡 Recommandations")
