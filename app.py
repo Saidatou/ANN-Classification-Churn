@@ -5,7 +5,7 @@ import os
 
 # Configuration de la page
 st.set_page_config(
-    page_title="Customer Churn Prediction",
+    page_title="Prédiction de Désabonnement Client",
     page_icon="📊",
     layout="wide"
 )
@@ -64,7 +64,7 @@ def load_models():
         return None
 
 # Interface principale
-st.title('🎯 Customer Churn Prediction')
+st.title('🎯 Prédiction de Désabonnement Client Bancaire')
 st.markdown("---")
 
 # Chargement des modèles
@@ -80,58 +80,66 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📍 Informations géographiques et démographiques")
-    geography = st.selectbox('Geography', onehot_encoder_geo.categories_[0])
-    gender = st.selectbox('Gender', label_encoder_gender.classes_)
-    age = st.slider('Age', 18, 92, value=40)
+    geographie = st.selectbox('Géographie', onehot_encoder_geo.categories_[0])
+    genre = st.selectbox('Genre', label_encoder_gender.classes_)
+    age = st.slider('Âge', 18, 92, value=40)
 
 with col2:
     st.subheader("💰 Informations financières")
-    credit_score = st.number_input('Credit Score', min_value=300, max_value=850, value=650)
-    balance = st.number_input('Balance', min_value=0.0, value=50000.0, step=1000.0)
-    estimated_salary = st.number_input('Estimated Salary', min_value=0.0, value=50000.0, step=1000.0)
+    score_credit = st.number_input('Score de Crédit', min_value=300, max_value=850, value=650)
+    solde = st.number_input('Solde du Compte (€)', min_value=0.0, value=50000.0, step=1000.0)
+    salaire_estime = st.number_input('Salaire Estimé (€)', min_value=0.0, value=50000.0, step=1000.0)
 
 st.subheader("🏦 Informations bancaires")
 col3, col4, col5 = st.columns(3)
 
 with col3:
-    tenure = st.slider('Tenure (années)', 0, 10, value=5)
+    anciennete = st.slider('Ancienneté (années)', 0, 10, value=5)
 
 with col4:
-    num_of_products = st.slider('Number of Products', 1, 4, value=2)
+    nb_produits = st.slider('Nombre de Produits', 1, 4, value=2)
 
 with col5:
-    has_cr_card = st.selectbox('Has Credit Card', [0, 1], index=1)
-    is_active_member = st.selectbox('Is Active Member', [0, 1], index=1)
+    carte_credit = st.selectbox('Possède une Carte de Crédit', [0, 1], index=1, 
+                                format_func=lambda x: 'Oui' if x == 1 else 'Non')
+    membre_actif = st.selectbox('Membre Actif', [0, 1], index=1,
+                                format_func=lambda x: 'Oui' if x == 1 else 'Non')
 
 # Bouton de prédiction
-if st.button('🔮 Prédire le Churn', type="primary", use_container_width=True):
+if st.button('🔮 Prédire le Risque de Désabonnement', type="primary", use_container_width=True):
     try:
-        # Préparation des données
-        input_data = pd.DataFrame({
-            'CreditScore': [credit_score],
-            'Gender': [label_encoder_gender.transform([gender])[0]],
-            'Age': [age],
-            'Tenure': [tenure],
-            'Balance': [balance],
-            'NumOfProducts': [num_of_products],
-            'HasCrCard': [has_cr_card],
-            'IsActiveMember': [is_active_member],
-            'EstimatedSalary': [estimated_salary]
-        })
+        # Affichage du statut de préparation
+        with st.spinner("🔄 Préparation des données client..."):
+            # Préparation des données (garde les noms originaux pour le modèle)
+            input_data = pd.DataFrame({
+                'CreditScore': [score_credit],
+                'Gender': [label_encoder_gender.transform([genre])[0]],
+                'Age': [age],
+                'Tenure': [anciennete],
+                'Balance': [solde],
+                'NumOfProducts': [nb_produits],
+                'HasCrCard': [carte_credit],
+                'IsActiveMember': [membre_actif],
+                'EstimatedSalary': [salaire_estime]
+            })
 
         # Encodage géographique
-        geo_encoded = onehot_encoder_geo.transform([[geography]]).toarray()
-        geo_encoded_df = pd.DataFrame(geo_encoded, columns=onehot_encoder_geo.get_feature_names_out(['Geography']))
+        with st.spinner("🌍 Traitement des données géographiques..."):
+            geo_encoded = onehot_encoder_geo.transform([[geographie]]).toarray()
+            geo_encoded_df = pd.DataFrame(geo_encoded, columns=onehot_encoder_geo.get_feature_names_out(['Geography']))
 
         # Combinaison des données
-        input_data = pd.concat([input_data.reset_index(drop=True), geo_encoded_df], axis=1)
+        with st.spinner("🔗 Assemblage des caractéristiques..."):
+            input_data = pd.concat([input_data.reset_index(drop=True), geo_encoded_df], axis=1)
 
         # Normalisation
-        input_data_scaled = scaler.transform(input_data)
+        with st.spinner("⚖️ Normalisation des données..."):
+            input_data_scaled = scaler.transform(input_data)
 
         # Prédiction
-        prediction = model.predict(input_data_scaled)
-        prediction_proba = prediction[0][0]
+        with st.spinner("🤖 Calcul de la prédiction..."):
+            prediction = model.predict(input_data_scaled)
+            prediction_proba = prediction[0][0]
 
         # Affichage des résultats
         st.markdown("---")
@@ -140,11 +148,11 @@ if st.button('🔮 Prédire le Churn', type="primary", use_container_width=True)
         col_result1, col_result2 = st.columns(2)
         
         with col_result1:
-            st.metric("Probabilité de Churn", f"{prediction_proba:.1%}")
+            st.metric("Probabilité de Désabonnement", f"{prediction_proba:.1%}")
         
         with col_result2:
             if prediction_proba > 0.5:
-                st.error("⚠️ Le client risque de partir")
+                st.error("⚠️ Le client risque fortement de partir")
                 risk_level = "ÉLEVÉ"
                 color = "red"
             elif prediction_proba > 0.3:
@@ -163,38 +171,66 @@ if st.button('🔮 Prédire le Churn', type="primary", use_container_width=True)
         st.subheader("💡 Recommandations")
         if prediction_proba > 0.5:
             st.markdown("""
-            - 🎁 Proposer des offres de fidélisation
-            - 📞 Contact proactif du service client
+            - 🎁 Proposer des offres de fidélisation personnalisées
+            - 📞 Contact proactif du conseiller clientèle
             - 💰 Révision des conditions tarifaires
-            - 🌟 Programme de récompenses personnalisé
+            - 🌟 Programme de récompenses exclusif
+            - 🤝 Entretien de satisfaction approfondi
             """)
         elif prediction_proba > 0.3:
             st.markdown("""
             - 📧 Campagne de rétention ciblée
-            - 🔍 Analyse des besoins clients
-            - 📈 Proposition d'upgrade de services
+            - 🔍 Analyse approfondie des besoins
+            - 📈 Proposition d'amélioration de services
+            - 📊 Suivi renforcé de satisfaction
             """)
         else:
             st.markdown("""
-            - 🚀 Opportunité d'upselling
+            - 🚀 Opportunité de vente croisée (cross-selling)
             - 📢 Programme de parrainage
-            - ⭐ Solliciter des avis clients
+            - ⭐ Sollicitation d'avis et témoignages
+            - 💎 Proposer des services premium
             """)
             
     except Exception as e:
         st.error(f"❌ Erreur lors de la prédiction : {str(e)}")
         st.info("💡 Vérifiez que tous les champs sont remplis correctement")
 
+# Section récapitulatif des données saisies
+with st.expander("📋 Récapitulatif des informations client"):
+    if 'score_credit' in locals():
+        st.markdown(f"""
+        **Profil Client :**
+        - **Géographie :** {geographie}
+        - **Genre :** {genre}
+        - **Âge :** {age} ans
+        - **Score de crédit :** {score_credit}
+        - **Solde du compte :** {solde:,.0f} €
+        - **Salaire estimé :** {salaire_estime:,.0f} €
+        - **Ancienneté :** {anciennete} ans
+        - **Nombre de produits :** {nb_produits}
+        - **Carte de crédit :** {'Oui' if carte_credit == 1 else 'Non'}
+        - **Membre actif :** {'Oui' if membre_actif == 1 else 'Non'}
+        """)
+
 # Informations sur l'application
 with st.expander("ℹ️ À propos de cette application"):
     st.markdown("""
     Cette application utilise un modèle de machine learning pour prédire la probabilité qu'un client quitte la banque.
     
-    **Modèle utilisé :** Réseau de neurones (TensorFlow/Keras)
+    **Modèle utilisé :** Réseau de neurones artificiels (TensorFlow/Keras)
     
     **Variables d'entrée :**
-    - Informations démographiques (âge, sexe, géographie)
-    - Score de crédit et informations financières
-    - Historique bancaire (ancienneté, produits, activité)
+    - **Informations démographiques :** âge, genre, géographie
+    - **Données financières :** score de crédit, solde, salaire estimé
+    - **Historique bancaire :** ancienneté, nombre de produits, possession carte de crédit, statut d'activité
+    
+    **Interprétation des résultats :**
+    - **🔴 Risque élevé (>50%) :** Action immédiate requise
+    - **🟡 Risque modéré (30-50%) :** Surveillance et actions préventives
+    - **🟢 Risque faible (<30%) :** Client stable, opportunités de développement
     """)
 
+# Footer
+st.markdown("---")
+st.markdown("*💼 Application développée pour l'analyse prédictive du churn bancaire*")
