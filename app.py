@@ -80,7 +80,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("📍 Informations géographiques et démographiques")
-    geographie = st.selectbox('Géographie', onehot_encoder_geo.categories_[0])
+    geographie = st.selectbox('Pays', onehot_encoder_geo.categories_[0])
     genre = st.selectbox('Genre', label_encoder_gender.classes_)
     age = st.slider('Âge', 18, 92, value=40)
 
