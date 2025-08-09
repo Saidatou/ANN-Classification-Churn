@@ -113,16 +113,27 @@ if st.button('🔮 Prédire le Risque de Désabonnement', type="primary", use_co
             # Préparation des données (garde les noms originaux pour le modèle)
            
             input_data = pd.DataFrame({
-                'CreditScore (Score de Crédit)': [score_credit],
-                'Gender (Genre)': [label_encoder_gender.transform([genre])[0]],
-                'Age (Âge)': [age],
-                'Tenure (Anncienneté)': [anciennete],
-                'Balance (Solde)': [solde],
-                'NumOfProducts (Nombre de Produits bancaires)': [nb_produits],
-                'HasCrCard (Détient une Carte Bancaire)': [carte_credit],
-                'IsActiveMember (Est un client Actif)': [membre_actif],
-                'EstimatedSalary (Estimation Salariale)': [salaire_estime]
+                'Score de Crédit': [score_credit],
+                'Genre': [label_encoder_gender.transform([genre])[0]],
+                'Âge': [age],
+                'Anncienneté': [anciennete],
+                'Solde bancaire': [solde],
+                'Nombre de Produits bancaires': [nb_produits],
+                'Détient une Carte Bancaire': [carte_credit],
+                'Est un client Actif': [membre_actif],
+                'Estimation Salariale': [salaire_estime]
             })
+            # input_data = pd.DataFrame({
+            #     'CreditScore': [score_credit],
+            #     'Gender': [label_encoder_gender.transform([genre])[0]],
+            #     'Age': [age],
+            #     'Tenure': [anciennete],
+            #     'Balance': [solde],
+            #     'NumOfProducts': [nb_produits],
+            #     'HasCrCard': [carte_credit],
+            #     'IsActiveMember': [membre_actif],
+            #     'EstimatedSalary': [salaire_estime]
+            # })
 
         # Encodage géographique
         with st.spinner("🌍 Traitement des données géographiques..."):
