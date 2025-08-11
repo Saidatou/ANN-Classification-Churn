@@ -27,7 +27,7 @@ Il y a des boucles dans le réseau → permet de « se souvenir » du contexte. 
 # Étapes de mise en place du projet (version vulgarisée)
 1) Préparer l’environnement de travail
 J’ai commencé par créer un espace de travail propre et isolé, qui me permet de travailler sur le projet sans interférer avec d’autres programmes installés sur l’ordinateur.
-iq
+
 2) Activer l’environnement
 Une fois cet espace prêt, je l’ai activé pour que tous les outils et bibliothèques utilisés soient bien organisés à l’intérieur.
 
@@ -58,3 +58,8 @@ J’ai publié le code complet du projet sur une plateforme collaborative (GitHu
 
 10) Mettre l’application en ligne (Streamlit Cloud)
 Enfin, j’ai déployé l’application sur internet pour qu’elle soit accessible depuis n’importe quel navigateur, sans avoir besoin d’installer quoi que ce soit.
+
+
+code:
+conda activate venv/
+pip install -r requirements.txt

@@ -5,7 +5,7 @@ import os
 
 # Configuration de la page
 st.set_page_config(
-    page_title="Prédiction de Désabonnement Client",
+    page_title="Prédiction du Churn ou de Désertion du Client",
     page_icon="📊",
     layout="wide"
 )
@@ -64,7 +64,7 @@ def load_models():
         return None
 
 # Interface principale
-st.title('🎯 Prédiction de Désabonnement Client Bancaire')
+st.title('🎯 Prédiction du Churn ou de Désertion Client Bancaire')
 st.markdown("---")
 
 # Chargement des modèles
@@ -106,7 +106,7 @@ with col5:
                                 format_func=lambda x: 'Oui' if x == 1 else 'Non')
 
 # Bouton de prédiction
-if st.button('🔮 Prédire le Risque de Désabonnement', type="primary", use_container_width=True):
+if st.button('🔮 Prédire le Risque de Churn ou de désertion ', type="primary", use_container_width=True):
     try:
         # Affichage du statut de préparation
         with st.spinner("🔄 Préparation des données client..."):
@@ -150,7 +150,7 @@ if st.button('🔮 Prédire le Risque de Désabonnement', type="primary", use_co
         col_result1, col_result2 = st.columns(2)
         
         with col_result1:
-            st.metric("Probabilité de Désabonnement", f"{prediction_proba:.1%}")
+            st.metric("Probabilité du Churn ou de désertion", f"{prediction_proba:.1%}")
         
         with col_result2:
             if prediction_proba > 0.5:
@@ -203,7 +203,7 @@ with st.expander("📋 Récapitulatif des informations client"):
     if 'score_credit' in locals():
         st.markdown(f"""
         **Profil Client :**
-        - **Géographie :** {geographie}
+        - **Pays :** {geographie}
         - **Genre :** {genre}
         - **Âge :** {age} ans
         - **Score de crédit :** {score_credit}
@@ -223,7 +223,7 @@ with st.expander("ℹ️ À propos de cette application"):
     **Modèle utilisé :** Réseau de neurones artificiels (TensorFlow/Keras)
     
     **Variables d'entrée :**
-    - **Informations démographiques :** âge, genre, géographie
+    - **Informations démographiques :** âge, genre, pays
     - **Données financières :** score de crédit, solde, salaire estimé
     - **Historique bancaire :** ancienneté, nombre de produits, possession carte de crédit, statut d'activité
     
